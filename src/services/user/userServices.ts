@@ -71,9 +71,6 @@ export class UserServices{
             throw new Error("Email ou senha invalidas")
         }
 
-        return findUser.name
         
     }
-
-
   } 

@@ -20,8 +20,7 @@ import jwtPlugin from "./src/plugins/jwt"
 const app = fastify({logger: true})
 
 app.register(userRoutes)
-/*app.register(jwtPlugin)*/
-
+app.register(jwtPlugin)
 /*app.register(sendMailer)*/
 
 app.listen({ port: 3000 }, function (err, address) {
