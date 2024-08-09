@@ -2,30 +2,22 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { UserServices } from "../../../services/user/userServices";
 import { sendMailer } from "../../../utils/emailsender";
 
-    export async function getUserController(
+export async function getUserController(
     request: FastifyRequest,
     reply: FastifyReply
-    ) {
-    
-
+) {
     try {
-
         const userServices = new UserServices();
 
-
-        const result = await userServices.getAllUsers()
-
+        const result = await userServices.getAllUsers();
 
         reply.status(200).send({ result });
     } catch (err) {
-        reply.status(400).send(err)
+        reply.status(400).send(err);
     }
-    }
+}
 
-    export async function registerUserController(
-    request: FastifyRequest,
-    reply: FastifyReply
-    ) {
+export async function registerUserController(request: FastifyRequest,reply: FastifyReply) {
     const userServices = new UserServices();
 
     const { name, email, password } = request.body as {
@@ -36,23 +28,20 @@ import { sendMailer } from "../../../utils/emailsender";
 
     try {
         const saveUser = await userServices.registerUniqueUser({
-        name,
-        email,
-        password,
+            name,
+            email,
+            password,
         });
 
         const send = sendMailer(email, name);
 
         reply.status(201).send({
-        message: "Usuario criado com sucesso",
+            message: "Usuario criado com sucesso",
         });
-    } catch (err) {}
-    }
+    } catch (err) { }
+}
 
-    export async function updateUserController(
-    request: FastifyRequest,
-    reply: FastifyReply
-    ) {
+export async function updateUserController(request: FastifyRequest,reply: FastifyReply) {
     const userServices = new UserServices();
 
     const { id } = request.query as { id: string };
@@ -69,42 +58,40 @@ import { sendMailer } from "../../../utils/emailsender";
 
     try {
         const updateUser = await userServices.updateUniqueUser({
-        id,
-        name,
-        email,
-        password,
+            id,
+            name,
+            email,
+            password,
         });
 
         reply.status(200).send({
-        message: "Usuario atualizado com sucesso",
+            message: "Usuario atualizado com sucesso",
         });
     } catch (err) {
         reply.status(400).send({
-        message: "Preencha pelo menos um campo",
+            message: "Preencha pelo menos um campo",
         });
     }
+}
+
+export async function authenticateUser(request: FastifyRequest,reply: FastifyReply) {
+    const userServices = new UserServices();
+
+    const { email, password } = request.body as {
+        email: string;
+        password: string;
+    };
+
+    const login = await userServices.loginUser({ email, password });
+
+    try {
+        const token = reply
+            .send({ message: "Logado com sucesso" })
+            .status(200)
+            .jwtSign({ email });
+
+        console.log(token);
+    } catch (err) {
+        reply.status(401).send({ message: "Não autorizado" });
     }
-
-    export async function authenticateUser(request: FastifyRequest, reply: FastifyReply){
-    
-        const userServices = new UserServices()
-    
-        const { email, password } = request.body as {email: string, password: string}
-    
-        const login = await userServices.loginUser({email, password})
-    
-
-        try{
-            const token = reply.send({message:
-                "Logado com sucesso"
-            }).status(200).jwtSign({email})
-        
-            console.log(token)
-        }catch(err){
-            reply.status(401).send({message:
-                "Não autorizado"
-            })
-        }
-        
-    
 }
