@@ -12,7 +12,7 @@ export class UserServices {
   async getAllUsers() {
     const users = await prismaRepositorie.user.findMany();
 
-    return users;
+    return users
   }
 
   async registerUniqueUser({ name, email, password }: UserRequest) {

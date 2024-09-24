@@ -4,9 +4,8 @@ import { authenticateUser, getUserController, registerUserController,updateUserC
 
 
 export async function userRoutes(app: FastifyInstance, options: any){
-    app.get('/', getUserController)
+    app.get('/users', {preHandler:app.authenticate}, getUserController)
     app.post('/register', registerUserController)
     app.put('/update', updateUserController)
-    app.post('/login', authenticateUser)
-    app.get('/protected',{onRequest:app.authenticate}, getUserController)
+    app.post('/login', {preHandler: app.createtoken}, authenticateUser)
 }

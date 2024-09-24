@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { UserServices } from "../../../services/user/userServices";
 import { sendMailer } from "../../../utils/emailsender";
 
+import { statusCode } from "../../../utils/status-code";
+
 export async function getUserController(
     request: FastifyRequest,
     reply: FastifyReply
@@ -11,7 +13,7 @@ export async function getUserController(
 
         const result = await userServices.getAllUsers();
 
-        reply.status(200).send({ result });
+        reply.status(statusCode.OK).send({ result });
     } catch (err) {
         reply.status(400).send(err);
     }
@@ -75,22 +77,20 @@ export async function updateUserController(request: FastifyRequest,reply: Fastif
 }
 
 export async function authenticateUser(request: FastifyRequest,reply: FastifyReply) {
-    const userServices = new UserServices();
+    
 
-    const { email, password } = request.body as {
-        email: string;
-        password: string;
-    };
-
-    const login = await userServices.loginUser({ email, password });
+    const { email, password } = request.body as { email: string, password: string }
 
     try {
-        const token = reply
-            .send({ message: "Logado com sucesso" })
-            .status(200)
-            .jwtSign({ email });
 
-        console.log(token);
+        const userServices = new UserServices();
+
+        const login = await userServices.loginUser({ email, password });
+
+        /*const token = reply.send({ message: "Logado com sucesso" }).status(200).jwtSign({ email });*/
+
+        return login
+
     } catch (err) {
         reply.status(401).send({ message: "Não autorizado" });
     }

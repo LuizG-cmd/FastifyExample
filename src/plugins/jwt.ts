@@ -8,20 +8,41 @@ import fastifyJwt from "@fastify/jwt";
 declare module 'fastify' {
   interface FastifyInstance {
       authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+      createtoken: (request: FastifyRequest, reply: FastifyReply) => Promise<void>
   }
 }
 
 const jwtPlugin = async (app: FastifyInstance) =>{
+
+
+  console.log('Registrando o plugin JWT');
     app.register(fastifyJwt,{
         secret: 'supersecret'
     })
 
+    app.decorate('createtoken', async function(request: FastifyRequest, reply: FastifyReply){
+      try {
 
-   app.decorate("authenticate", async function(request: FastifyRequest, reply: FastifyReply) {
-        try {
-          await request.jwtVerify()
-        } catch (err) {
-          reply.send(err)
+        const message = 
+        app.jwt.sign({"message":
+          "Oi, estou funcionando"
+        })
+
+        reply.send(message)
+     
+      } catch(err){
+        
+        console.log(err)
+      }
+    })
+
+
+   app.decorate('authenticate', async function(request: FastifyRequest, reply: FastifyReply) {
+ 
+    try {
+          request.jwtVerify()
+        } catch{
+          reply.send("não foi possivel localizar o token")
         }
  })
 } 
