@@ -4,6 +4,7 @@ import { sendMailer } from "../../../utils/emailsender";
 
 import { statusCode } from "../../../utils/status-code";
 
+
 export async function getUserController(
     request: FastifyRequest,
     reply: FastifyReply
@@ -78,7 +79,6 @@ export async function updateUserController(request: FastifyRequest,reply: Fastif
 
 export async function authenticateUser(request: FastifyRequest,reply: FastifyReply) {
     
-
     const { email, password } = request.body as { email: string, password: string }
 
     try {
@@ -87,11 +87,11 @@ export async function authenticateUser(request: FastifyRequest,reply: FastifyRep
 
         const login = await userServices.loginUser({ email, password });
 
+        await request.server.createtoken(request, reply);
+
         /*const token = reply.send({ message: "Logado com sucesso" }).status(200).jwtSign({ email });*/
-
-        return login
-
+    
     } catch (err) {
-        reply.status(401).send({ message: "Não autorizado" });
+        reply.status(401).send({ message: "Login ou senha inválidos" });
     }
 }

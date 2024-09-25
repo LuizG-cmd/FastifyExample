@@ -51,9 +51,10 @@ export class UserServices {
   }
 
   async loginUser({ email, password }: LoginRequest) {
-    const findUser = await prismaRepositorie.user.findFirst({
+    
+    const findUser = await prismaRepositorie.user.findUnique({
       where: {
-        email,
+        email
       },
     });
 

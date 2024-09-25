@@ -14,26 +14,23 @@ declare module 'fastify' {
 
 const jwtPlugin = async (app: FastifyInstance) =>{
 
-
-  console.log('Registrando o plugin JWT');
     app.register(fastifyJwt,{
         secret: 'supersecret'
     })
 
     app.decorate('createtoken', async function(request: FastifyRequest, reply: FastifyReply){
-      try {
+  
 
-        const message = 
-        app.jwt.sign({"message":
-          "Oi, estou funcionando"
+        const token = app.jwt.sign(
+          {
+            object: request.body
+          }
+        )
+
+        reply.send({message:"Logado com sucesso",
+          token
         })
-
-        reply.send(message)
      
-      } catch(err){
-        
-        console.log(err)
-      }
     })
 
 
