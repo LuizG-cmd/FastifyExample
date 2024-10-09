@@ -38,9 +38,11 @@ const jwtPlugin = async (app: FastifyInstance) =>{
  
     try {
           request.jwtVerify()
-        } catch{
-          reply.send("não foi possivel localizar o token")
+        } catch (err){
+          reply.status(400).send("Error")
         }
+
+    
  })
 } 
 

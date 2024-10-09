@@ -12,6 +12,10 @@ export class UserServices {
   async getAllUsers() {
     const users = await prismaRepositorie.user.findMany();
 
+    if(users.length === 0){
+      throw new Error("Não existem usuários cadastrados")
+    }
+
     return users
   }
 
@@ -25,6 +29,10 @@ export class UserServices {
         hashedpassword,
       },
     });
+
+    if(!name || !email || !hashedpassword){
+      throw new Error("Dados não preenchidos")
+    }
 
     return user;
   }
@@ -44,7 +52,7 @@ export class UserServices {
     });
 
     if (!id) {
-      return new Error("Usuario não localizado");
+      throw new Error("Usuario não localizado");
     }
 
     return userUpdate;
@@ -59,7 +67,7 @@ export class UserServices {
     });
 
     if (!findUser) {
-      throw new Error("Usuario não existe");
+      throw new Error("message:");
     }
 
     const matchuser = await bcrypt.compare(password, findUser.hashedpassword);
