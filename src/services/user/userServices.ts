@@ -8,8 +8,8 @@ import {
 
 import bcrypt from "bcrypt";
 
-export class UserServices {
-  async getAllUsers() {
+/*export class UserServices {*/
+  async function getAllUsers() {
     const users = await prismaRepositorie.user.findMany();
 
     if(users.length === 0){
@@ -19,7 +19,7 @@ export class UserServices {
     return users
   }
 
-  async registerUniqueUser({ name, email, password }: UserRequest) {
+  async function registerUniqueUser({ name, email, password }: UserRequest) {
     const hashedpassword = await bcrypt.hash(password, 10);
 
     const user = await prismaRepositorie.user.create({
@@ -37,8 +37,9 @@ export class UserServices {
     return user;
   }
 
-  async updateUniqueUser({ id, name, email, password }: UserRequestUpdate) {
+  async function updateUniqueUser({ id, name, email, password }: UserRequestUpdate) {
     const hashedpassword = await bcrypt.hash(password, 10);
+    
 
     const userUpdate = await prismaRepositorie.user.update({
       where: {
@@ -58,7 +59,7 @@ export class UserServices {
     return userUpdate;
   }
 
-  async loginUser({ email, password }: LoginRequest) {
+  async function loginUser({ email, password }: LoginRequest) {
     
     const findUser = await prismaRepositorie.user.findUnique({
       where: {
@@ -76,4 +77,11 @@ export class UserServices {
       throw new Error("Email ou senha invalidas");
     }
   }
+
+export default {
+  getAllUsers,
+  registerUniqueUser,
+  updateUniqueUser,
+  loginUser
 }
+

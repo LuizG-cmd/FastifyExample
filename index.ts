@@ -6,14 +6,9 @@ import { sendMailer } from './src/utils/emailsender'
 import jwtPlugin from "./src/plugins/jwt"
 
 
-/* Senhas sendo geradas iguais mesmo com e-mail diferente ----- Substituida biblioteca crypto do node pela biblioteca bcrypt*/
-/* Colocar o JWT nas rotas, ou nas classes?*/
-/* Encapsular o hashpassword em um plugin? ----- Substituida biblioteca crypto do node pela biblioteca bcrypt */
 /* Implantar o envio do e-mail quando usuario é registrado ------ Feito de forma mais ou menos, dar uma olhada a fundo */
 /* Adicionar codigos HTTP */
-/* Verificar se o e-mail ja existe na base de dados */
 /* Consertar update, só funciona se preencher todos os campos*/
-/* O que fazer com o token gerado na autenticação, como utilizar o verify da classe jwt */
 /* Tipar de forma correta meus dados */
 
 

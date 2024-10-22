@@ -12,11 +12,16 @@ declare module 'fastify' {
   }
 }
 
-const jwtPlugin = async (app: FastifyInstance) =>{
+const JWT_SECRET = process.env.JWT_SECRET_KEY || "TESTE"
+
+const jwtPlugin = async (app: FastifyInstance) => {
 
     app.register(fastifyJwt,{
-        secret: 'supersecret'
-    })
+        secret: JWT_SECRET
+      })
+
+
+    console.log(JWT_SECRET)
 
     app.decorate('createtoken', async function(request: FastifyRequest, reply: FastifyReply){
   
@@ -24,6 +29,9 @@ const jwtPlugin = async (app: FastifyInstance) =>{
         const token = app.jwt.sign(
           {
             object: request.body
+          },
+          {
+            expiresIn: "24h"
           }
         )
 
@@ -34,7 +42,7 @@ const jwtPlugin = async (app: FastifyInstance) =>{
     })
 
 
-   app.decorate('authenticate', async function(request: FastifyRequest, reply: FastifyReply) {
+    app.decorate('authenticate', async function(request: FastifyRequest, reply: FastifyReply) {
  
     try {
           request.jwtVerify()
@@ -43,7 +51,7 @@ const jwtPlugin = async (app: FastifyInstance) =>{
         }
 
     
- })
+    })
 } 
 
 export default fp(jwtPlugin, '4.x')

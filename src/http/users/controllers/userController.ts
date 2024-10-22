@@ -1,13 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UserServices } from "../../../services/user/userServices";
+/*import { UserServices } from "../../../services/user/userServices";*/
 import { sendMailer } from "../../../utils/emailsender";
+import userServices from "../../../services/user/userServices"
 
 export async function getUserController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
   try {
-    const userServices = new UserServices();
+    /*const userServices = new UserServices();*/
 
     const result = await userServices.getAllUsers();
 
@@ -24,7 +25,7 @@ export async function registerUserController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userServices = new UserServices();
+  /*const userServices = new UserServices();*/
 
   const { name, email, password } = request.body as {
     name: string;
@@ -54,7 +55,7 @@ export async function updateUserController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userServices = new UserServices();
+ /* const userServices = new UserServices();*/
 
   const { id } = request.query as { id: string };
 
@@ -96,14 +97,15 @@ export async function authenticateUser(
   };
 
   try {
-    const userServices = new UserServices();
+    /*const userServices = new UserServices();*/
 
     const login = await userServices.loginUser({ email, password });
 
-    await request.server.createtoken(request, reply);
+    /*await request.server.createtoken(request, reply);*/
 
     /*const token = reply.send({ message: "Logado com sucesso" }).status(200).jwtSign({ email });*/
   } catch (err) {
     reply.status(401).send({ message: "Bad Authorization" });
   }
 }
+
